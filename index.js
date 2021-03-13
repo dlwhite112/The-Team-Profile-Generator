@@ -1,133 +1,148 @@
-const inquirer = require('inquirer')
-var prompt = inquirer.createPromptModule();
+const inquirer = require("inquirer");
+const fs = require("fs");
+const Manager = require("./lib/manager");
+const Engineer = require("./lib/engineer");
+const Intern = require("./lib/intern");
+const markdown = require("./src/markdown");
 
+markdown.allCards = [];
 
+// const teamArr = [];
+// const idArr = [];
 
 let engineerQuestions = [
   {
     type: "input",
     message: "What is the engineer's name?",
-    name: "engineer-name",
+    name: "engineerName",
   },
   {
     type: "input",
     message: "What is the engineer's id?",
-    name: "engineer-id",
+    name: "engineerId",
   },
   {
     type: "input",
     message: "What is the engineer's email?",
-    name: "engineer-email",
+    name: "engineerEmail",
   },
   {
     type: "input",
     message: "What is the engineer's GitHub username?",
-    name: "engineer-github",
-  },
-  {
-    type: "list",
-    message: "Which type of team member would you like to add?",
-    name: "add",
-    choices: ["Engineer", "Intern", "I dont want to add any more team members"],
+    name: "engineerGithub",
   },
 ];
 let internQuestions = [
   {
     type: "input",
     message: "What is the Intern's name?",
-    name: "intern-name",
+    name: "internName",
   },
   {
     type: "input",
     message: "What is the Intern's id?",
-    name: "intern-id",
+    name: "internId",
   },
   {
     type: "input",
     message: "What is the Intern's email?",
-    name: "intern-email",
+    name: "internEmail",
   },
   {
     type: "input",
     message: "What is the Intern's school?",
-    name: "intern-school",
-  },
-  {
-    type: "list",
-    message: "Which type of team member would you like to add?",
-    name: "add",
-    choices: ["Engineer", "Intern", "I dont want to add any more team members"],
+    name: "internSchool",
   },
 ];
 let managerQuestions = [
   {
     type: "input",
     message: "What is the team manager's name?",
-    name: "manager-name",
+    name: "managerName",
   },
   {
     type: "input",
     message: "What is the team manager's id?",
-    name: "manager-id",
+    name: "managerId",
   },
   {
     type: "input",
     message: "What is the team manager's email?",
-    name: "manager-email",
+    name: "managerEmail",
   },
   {
     type: "input",
     message: "What is the team manager's office number?",
-    name: "manager-phone",
+    name: "managerPhone",
   },
+];
+
+let teamQuestion = [
   {
     type: "list",
     message: "Which type of team member would you like to add?",
-    name: "add",
+    name: "addChoice",
     choices: ["Engineer", "Intern", "I dont want to add any more team members"],
   },
 ];
 
 generateHtml = () => {
+  fs.writeFileSync("index.html", markdown.markdownHtml(markdown.allCards.join("")));
+
   console.log("this is where we will make the html");
 };
 
 function init() {
   inquirer.prompt(managerQuestions).then((answers) => {
-    if (answers.add === "Engineer") {
-      engineer();
-    }
-    if (answers.add === "Intern") {
-      intern();
-    }
-    if (answers.add === "I dont want to add any more team members") {
-      generateHtml() } 
+    const manager = new Manager(
+      answers.managerName,
+      answers.managerId,
+      answers.managerEmail,
+      answers.managerPhone
+    );
+    markdown.allCards.push(markdown.managerCard(manager));
+    addEmployee();
   });
 }
 
-function engineer() {
+addEmployee = () => {
+  inquirer.prompt(teamQuestion).then((answers) => {
+    switch (answers.addChoice) {
+      case "Engineer":
+        addEngineer();
+        break;
+      case "Intern":
+        addIntern();
+        break;
+      default:
+        generateHtml();
+    }
+  });
+};
+
+function addEngineer() {
   inquirer.prompt(engineerQuestions).then((answers) => {
-    if (answers.add === "Engineer") {
-      engineer();
-    }
-    if (answers.add === "Intern") {
-      intern();
-    } 
-    if (answers.add === "I dont want to add any more team members") {
-      generateHtml() }
+    const engineer = new Engineer(
+      answers.engineerName,
+      answers.engineerId,
+      answers.engineerEmail,
+      answers.engineerGithub
+    );
+    markdown.allCards.push(markdown.engineerCard(engineer));
+    addEmployee();
   });
 }
-function intern() {
+function addIntern() {
   inquirer.prompt(internQuestions).then((answers) => {
-    if (answers.add === "Engineer") {
-      engineer();
-    }
-    if (answers.add === "Intern") {
-      intern();
-    } 
-    if (answers.add === "I dont want to add any more team members") {
-      generateHtml() }
+    const intern = new Intern(
+      answers.internName,
+      answers.internId,
+      answers.internEmail,
+      answers.internSchool
+    );
+    markdown.allCards.push(markdown.internCard(intern));
+    addEmployee();
   });
 }
 
-init()
+init();
