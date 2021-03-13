@@ -39,7 +39,9 @@
   
   
   ## Screenshots
-   
+  <img width="1536" alt="screenshot A" src="https://user-images.githubusercontent.com/74333123/111046138-495c5e00-8412-11eb-8c34-88aa8c5f05aa.png">
+  <img width="1536" alt="screenshot B" src="https://user-images.githubusercontent.com/74333123/111046394-5aa56a80-8412-11eb-9faf-d90f4b4e83a9.png">
+
   
   
   ## Tools
@@ -48,7 +50,7 @@
 
   
   ## Link
-  
+  https://user-images.githubusercontent.com/74333123/111045738-2df15300-8412-11eb-94a5-e07ba9b43a46.mp4
   
   
   ## Questions
